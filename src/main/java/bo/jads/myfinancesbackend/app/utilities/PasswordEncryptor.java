@@ -1,0 +1,25 @@
+package bo.jads.myfinancesbackend.app.utilities;
+
+import org.mindrot.jbcrypt.BCrypt;
+
+public class PasswordEncryptor {
+
+    private PasswordEncryptor() {
+        throw new IllegalStateException("Cannot instantiate this class");
+    }
+
+    public static String hashPassword(String plainTextPassword) {
+        String salt = BCrypt.gensalt(WORKLOAD);
+        return BCrypt.hashpw(plainTextPassword, salt);
+    }
+
+    public static Boolean checkPassword(String plainTextPassword, String storedHash) {
+        if (BaseUtility.isNull(storedHash) || !storedHash.startsWith("$2a$")) {
+            throw new IllegalArgumentException("Invalid hash provided for comparison");
+        }
+        return BCrypt.checkpw(plainTextPassword, storedHash);
+    }
+
+    private static final Integer WORKLOAD = 12;
+
+}
