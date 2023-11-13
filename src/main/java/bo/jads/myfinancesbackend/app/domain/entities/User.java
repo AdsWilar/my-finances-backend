@@ -21,7 +21,7 @@ public class User {
     @Column(name = "password", nullable = false, length = 512)
     private String password;
 
-    @Column(name = "code", unique = true, nullable = false, length = 64)
+    @Column(name = "code", unique = true, length = 64)
     private String code;
 
     @Enumerated(EnumType.STRING)
@@ -43,12 +43,13 @@ public class User {
     @Column(name = "phone", length = 64)
     private String phone;
 
-    @Column(name = "photo", length = 512)
-    private String photo;
+    @Column(name = "photo_path", length = 512)
+    private String photoPath;
 
     @PrePersist
     @PreUpdate
     private void prePersistOrUpdate() {
+        username = username.toLowerCase().trim();
         names = names.toUpperCase().trim();
         if (firstSurname != null && firstSurname.isBlank()) {
             firstSurname = null;

@@ -52,21 +52,6 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.32</version>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>jakarta.validation</groupId>-->
-<!--			<artifactId>jakarta.validation-api</artifactId>-->
-<!--			<version>2.0.2</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>javax.validation</groupId>-->
-<!--			<artifactId>validation-api</artifactId>-->
-<!--			<version>2.0.1.Final</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-validation</artifactId>-->
-<!--			<version>3.1.1</version>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>org.mindrot</groupId>
 			<artifactId>jbcrypt</artifactId>
@@ -76,6 +61,11 @@
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>${org.mapstruct.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>bo.jads</groupId>
+			<artifactId>token-manager</artifactId>
+			<version>1.0.0</version>
 		</dependency>
     </dependencies>
 

@@ -12,12 +12,9 @@ import org.mapstruct.Mapping;
 public interface UserMapper {
 
     @Mapping(target = "password", expression = "java(PasswordEncryptor.hashPassword(request.getPassword()))")
-    @Mapping(target = "code", constant = "#")
     @Mapping(target = "status", expression = "java(UserStatus.ENABLED)")
-    @Mapping(target = "photo", ignore = true)
     User fromUserRequestToUser(UserRequest request);
 
-    @Mapping(target = "photo", ignore = true)
     UserResponse fromUserToUserResponse(User user);
 
 }

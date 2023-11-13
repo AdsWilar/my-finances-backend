@@ -15,8 +15,9 @@ public class GetUserByUsername implements BaseUseCase<String, User> {
 
     @Override
     public User execute(String username) throws UserNotFoundException {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("The user could not be found"));
+        return userRepository.findByUsername(username.trim().toLowerCase()).orElseThrow(
+                () -> new UserNotFoundException(String.format("User with username: %s not found.", username))
+        );
     }
 
 }

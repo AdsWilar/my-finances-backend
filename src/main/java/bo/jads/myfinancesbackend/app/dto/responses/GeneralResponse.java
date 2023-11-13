@@ -1,5 +1,6 @@
 package bo.jads.myfinancesbackend.app.dto.responses;
 
+import bo.jads.myfinancesbackend.app.dto.responses.enums.ResponseTitle;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class GeneralResponse<Data> {
 
-    private String title;
+    private ResponseTitle title;
     private Boolean status;
     private String message;
     private Data data;

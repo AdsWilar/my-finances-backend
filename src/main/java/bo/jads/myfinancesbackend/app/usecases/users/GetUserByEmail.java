@@ -15,8 +15,8 @@ public class GetUserByEmail implements BaseUseCase<String, User> {
 
     @Override
     public User execute(String email) throws UserNotFoundException {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("The user could not be found"));
+        return userRepository.findByEmail(email.trim().toLowerCase())
+                .orElseThrow(() -> new UserNotFoundException(String.format("User with email: %s not found.", email)));
     }
 
 }

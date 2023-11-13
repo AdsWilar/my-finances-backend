@@ -5,11 +5,9 @@ import bo.jads.myfinancesbackend.app.domain.repositories.UserRepository;
 import bo.jads.myfinancesbackend.app.dto.FileDto;
 import bo.jads.myfinancesbackend.app.dto.requests.UserRequest;
 import bo.jads.myfinancesbackend.app.dto.responses.UserResponse;
-import bo.jads.myfinancesbackend.app.exceptions.DirectoryCreationException;
-import bo.jads.myfinancesbackend.app.exceptions.SaveFileException;
+import bo.jads.myfinancesbackend.app.exceptions.files.FileException;
 import bo.jads.myfinancesbackend.app.mappers.UserMapper;
 import bo.jads.myfinancesbackend.app.usecases.BaseUseCase;
-import bo.jads.myfinancesbackend.app.utilities.BaseUtility;
 import bo.jads.myfinancesbackend.app.utilities.filesaver.UserPhotoFileManager;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -23,14 +21,14 @@ public class SaveUser implements BaseUseCase<UserRequest, UserResponse> {
     private final UserPhotoFileManager fileManager;
 
     @Override
-    public UserResponse execute(UserRequest request) throws DirectoryCreationException, SaveFileException {
+    public UserResponse execute(UserRequest request) throws FileException {
         User user = userMapper.fromUserRequestToUser(request);
         User savedUser = userRepository.saveAndFlush(user);
         savedUser.setCode(savedUser.getUsername().concat("#").concat(savedUser.getId().toString()));
         FileDto photo = request.getPhoto();
-        if (!BaseUtility.isNull(photo)) {
+        if (photo != null) {
             String photoPath = fileManager.savePhoto(savedUser.getId(), photo);
-            savedUser.setPhoto(photoPath);
+            savedUser.setPhotoPath(photoPath);
         }
         User updatedUser = userRepository.saveAndFlush(savedUser);
         UserResponse response = userMapper.fromUserToUserResponse(updatedUser);

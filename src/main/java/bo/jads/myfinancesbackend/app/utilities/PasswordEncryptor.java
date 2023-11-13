@@ -5,7 +5,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class PasswordEncryptor {
 
     private PasswordEncryptor() {
-        throw new IllegalStateException("Cannot instantiate this class");
+        throw new IllegalStateException("Cannot instantiate this class.");
     }
 
     public static String hashPassword(String plainTextPassword) {
@@ -14,8 +14,8 @@ public class PasswordEncryptor {
     }
 
     public static Boolean checkPassword(String plainTextPassword, String storedHash) {
-        if (BaseUtility.isNull(storedHash) || !storedHash.startsWith("$2a$")) {
-            throw new IllegalArgumentException("Invalid hash provided for comparison");
+        if (storedHash == null || !storedHash.startsWith("$2a$")) {
+            throw new IllegalArgumentException("Invalid hash provided for comparison.");
         }
         return BCrypt.checkpw(plainTextPassword, storedHash);
     }
