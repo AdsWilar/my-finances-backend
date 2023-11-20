@@ -14,7 +14,7 @@ public interface UserService {
 
     UserResponse registerUser(UserRequest request) throws UserException, FileException;
 
-    LoginResponse logIn(LoginRequest request) throws UserException, TokenGenerationException;
+    LoginResponse logIn(LoginRequest request) throws UserException, FileReadException, TokenGenerationException;
 
     UserResponse getUserById(Long id) throws UserNotFoundException, FileReadException;
 

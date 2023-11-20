@@ -15,7 +15,7 @@ public class GetUserById implements BaseUseCase<Long, User> {
 
     @Override
     public User execute(Long id) throws UserNotFoundException {
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("The user could not be found."));
+        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
 }

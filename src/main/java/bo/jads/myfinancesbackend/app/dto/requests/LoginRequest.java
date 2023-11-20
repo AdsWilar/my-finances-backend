@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 public class LoginRequest {
 
-    @NotBlank(message = "Username is required")
+    @NotBlank(message = "The username is required")
     private String username;
-    @NotBlank(message = "Password is required")
+    @NotBlank(message = "The password is required")
     private String password;
 
 }

@@ -49,21 +49,23 @@ public class User {
     @PrePersist
     @PreUpdate
     private void prePersistOrUpdate() {
-        username = username.toLowerCase().trim();
-        names = names.toUpperCase().trim();
-        if (firstSurname != null && firstSurname.isBlank()) {
-            firstSurname = null;
-        }
+        username = username.trim().toLowerCase();
+        names = names.trim().toUpperCase();
         if (firstSurname != null) {
-            firstSurname = firstSurname.toUpperCase().trim();
-        }
-        if (secondSurname != null && secondSurname.isBlank()) {
-            secondSurname = null;
+            if (firstSurname.isBlank()) {
+                firstSurname = null;
+            } else {
+                firstSurname = firstSurname.trim().toUpperCase();
+            }
         }
         if (secondSurname != null) {
-            secondSurname = secondSurname.toUpperCase().trim();
+            if (secondSurname.isBlank()) {
+                secondSurname = null;
+            } else {
+                secondSurname = secondSurname.trim().toUpperCase();
+            }
         }
-        email = email.toLowerCase();
+        email = email.trim().toLowerCase();
     }
 
 }

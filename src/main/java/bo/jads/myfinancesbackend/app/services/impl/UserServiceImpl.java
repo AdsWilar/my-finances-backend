@@ -1,9 +1,7 @@
 package bo.jads.myfinancesbackend.app.services.impl;
 
-import bo.jads.myfinancesbackend.app.configs.FileStorageConfig;
 import bo.jads.myfinancesbackend.app.domain.entities.User;
 import bo.jads.myfinancesbackend.app.domain.entities.enums.UserStatus;
-import bo.jads.myfinancesbackend.app.dto.FileDto;
 import bo.jads.myfinancesbackend.app.dto.requests.LoginRequest;
 import bo.jads.myfinancesbackend.app.dto.requests.UserRequest;
 import bo.jads.myfinancesbackend.app.dto.responses.LoginResponse;
@@ -17,8 +15,6 @@ import bo.jads.myfinancesbackend.app.usecases.users.GetUserByEmail;
 import bo.jads.myfinancesbackend.app.usecases.users.GetUserById;
 import bo.jads.myfinancesbackend.app.usecases.users.GetUserByUsername;
 import bo.jads.myfinancesbackend.app.usecases.users.SaveUser;
-import bo.jads.myfinancesbackend.app.utilities.Base64Utility;
-import bo.jads.myfinancesbackend.app.utilities.IoUtility;
 import bo.jads.myfinancesbackend.app.utilities.PasswordEncryptor;
 import bo.jads.myfinancesbackend.app.utilities.filesaver.UserPhotoFileManager;
 import bo.jads.tokenmanager.core.TokenManager;
@@ -28,9 +24,6 @@ import bo.jads.tokenmanager.enums.ExpirationTimeType;
 import bo.jads.tokenmanager.exceptions.TokenGenerationException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.io.IOException;
 
 @AllArgsConstructor
 @Service
@@ -42,8 +35,7 @@ public class UserServiceImpl implements UserService {
     private final GetUserById getUserById;
 
     private final UserMapper userMapper;
-    private final FileStorageConfig fileStorageConfig;
-    private final UserPhotoFileManager fileManager;
+    private final UserPhotoFileManager userPhotoFileManager;
 
     @Override
     public UserResponse registerUser(UserRequest request) throws UserException, FileException {
@@ -70,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public LoginResponse logIn(LoginRequest request) throws UserException, TokenGenerationException {
+    public LoginResponse logIn(LoginRequest request) throws UserException, FileReadException, TokenGenerationException {
         try {
             User user = getUserByUsername.execute(request.getUsername());
             if (!PasswordEncryptor.checkPassword(request.getPassword(), user.getPassword())) {
@@ -79,8 +71,15 @@ public class UserServiceImpl implements UserService {
             if (user.getStatus().equals(UserStatus.DISABLED)) {
                 throw new DisabledUserException();
             }
-            UserResponse userResponse = userMapper.fromUserToUserResponse(user);
-            TokenResponse tokenResponse = generateToken(userResponse);
+            UserResponse userResponse = userMapper.entityToResponse(user);
+            TokenRequest<UserResponse> tokenRequest = new TokenRequest<>(
+                    userResponse.getUsername(), ExpirationTimeType.MINUTE, 30, userResponse
+            );
+            TokenResponse tokenResponse = TokenManager.getInstance().generateToken(tokenRequest);
+            String photoPath = user.getPhotoPath();
+            if (photoPath != null && !photoPath.isBlank()) {
+                userResponse.setPhoto(userPhotoFileManager.getUserPhoto(photoPath));
+            }
             return new LoginResponse(userResponse, tokenResponse.getAccessToken(), tokenResponse.getExpirationTime());
         } catch (UserNotFoundException e) {
             throw new InvalidCredentialsException();
@@ -90,41 +89,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse getUserById(Long id) throws UserNotFoundException, FileReadException {
         User user = getUserById.execute(id);
-        UserResponse response = userMapper.fromUserToUserResponse(user);
+        UserResponse response = userMapper.entityToResponse(user);
         String photoPath = user.getPhotoPath();
         if (photoPath != null && !photoPath.isBlank()) {
-            setUserPhoto(photoPath, response);
+            response.setPhoto(userPhotoFileManager.getUserPhoto(photoPath));
         }
         return response;
-    }
-
-    private TokenResponse generateToken(UserResponse userResponse) throws TokenGenerationException {
-        TokenRequest<UserResponse> tokenRequest = new TokenRequest<>(
-                fileStorageConfig.getPrivateKeyAbsolutePath(),
-                fileStorageConfig.getPublicKeyAbsolutePath(),
-                false,
-                userResponse.getUsername(),
-                ExpirationTimeType.MINUTE,
-                30,
-                userResponse
-        );
-        return TokenManager.getInstance().generateToken(tokenRequest);
-    }
-
-    private void setUserPhoto(String photoPath, UserResponse response) throws FileReadException {
-        String photoAbsolutePath = fileManager.getAbsolutePath(photoPath);
-        File photoFile = new File(photoAbsolutePath);
-        try {
-            byte[] photoBytes = IoUtility.readFile(photoAbsolutePath);
-            FileDto photo = new FileDto(
-                    IoUtility.getFileNameWithoutExtension(photoFile),
-                    Base64Utility.encodeAsString(photoBytes),
-                    IoUtility.getFileExtension(photoFile)
-            );
-            response.setPhoto(photo);
-        } catch (IOException e) {
-            throw new FileReadException("User photo could not be found.", e);
-        }
     }
 
 }
