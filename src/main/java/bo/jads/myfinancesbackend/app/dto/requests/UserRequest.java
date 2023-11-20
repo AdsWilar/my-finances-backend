@@ -9,13 +9,13 @@ import lombok.Getter;
 @Getter
 public class UserRequest {
 
-    @NotBlank(message = "Username is required")
+    @NotBlank(message = "The username is required")
     private String username;
-    @NotBlank(message = "Password is required")
-    @Size(message = "Password must be at least 8 characters", min = 8)
+    @NotBlank(message = "The password is required")
+    @Size(message = "The password must be at least 8 characters", min = 8)
     private String password;
-    @NotBlank(message = "Password confirmation is required")
-    @Size(message = "Password confirmation must be at least 8 characters", min = 8)
+    @NotBlank(message = "The password confirmation is required")
+    @Size(message = "The password confirmation must be at least 8 characters", min = 8)
     private String passwordConfirmation;
     @NotBlank(message = "Names are required")
     private String names;

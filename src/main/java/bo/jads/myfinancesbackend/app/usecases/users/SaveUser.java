@@ -18,20 +18,20 @@ public class SaveUser implements BaseUseCase<UserRequest, UserResponse> {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final UserPhotoFileManager fileManager;
+    private final UserPhotoFileManager userPhotoFileManager;
 
     @Override
     public UserResponse execute(UserRequest request) throws FileException {
-        User user = userMapper.fromUserRequestToUser(request);
+        User user = userMapper.requestToEntity(request);
         User savedUser = userRepository.saveAndFlush(user);
         savedUser.setCode(savedUser.getUsername().concat("#").concat(savedUser.getId().toString()));
         FileDto photo = request.getPhoto();
         if (photo != null) {
-            String photoPath = fileManager.savePhoto(savedUser.getId(), photo);
+            String photoPath = userPhotoFileManager.saveUserPhoto(savedUser.getId(), photo);
             savedUser.setPhotoPath(photoPath);
         }
         User updatedUser = userRepository.saveAndFlush(savedUser);
-        UserResponse response = userMapper.fromUserToUserResponse(updatedUser);
+        UserResponse response = userMapper.entityToResponse(updatedUser);
         response.setPhoto(photo);
         return response;
     }

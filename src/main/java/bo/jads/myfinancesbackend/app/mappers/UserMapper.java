@@ -9,12 +9,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(imports = {PasswordEncryptor.class, UserStatus.class})
-public interface UserMapper {
+public interface UserMapper extends BaseMapper<User, UserRequest, UserResponse> {
 
     @Mapping(target = "password", expression = "java(PasswordEncryptor.hashPassword(request.getPassword()))")
     @Mapping(target = "status", expression = "java(UserStatus.ENABLED)")
-    User fromUserRequestToUser(UserRequest request);
-
-    UserResponse fromUserToUserResponse(User user);
+    User requestToEntity(UserRequest request);
 
 }

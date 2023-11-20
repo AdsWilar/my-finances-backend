@@ -6,8 +6,8 @@ import bo.jads.myfinancesbackend.app.dto.responses.GeneralResponse;
 import bo.jads.myfinancesbackend.app.dto.responses.LoginResponse;
 import bo.jads.myfinancesbackend.app.dto.responses.UserResponse;
 import bo.jads.myfinancesbackend.app.dto.responses.enums.ResponseTitle;
-import bo.jads.myfinancesbackend.app.exceptions.files.FileReadException;
 import bo.jads.myfinancesbackend.app.exceptions.files.FileException;
+import bo.jads.myfinancesbackend.app.exceptions.files.FileReadException;
 import bo.jads.myfinancesbackend.app.exceptions.users.UserException;
 import bo.jads.myfinancesbackend.app.exceptions.users.UserNotFoundException;
 import bo.jads.myfinancesbackend.app.services.UserService;
@@ -34,7 +34,7 @@ public class UserController {
 
     @PostMapping("/log-in")
     public GeneralResponse<LoginResponse> logIn(@Valid @RequestBody LoginRequest request) throws UserException,
-            TokenGenerationException {
+            FileReadException, TokenGenerationException {
         LoginResponse response = userService.logIn(request);
         return new GeneralResponse<>(ResponseTitle.USERS, true, "Successful login.", response);
     }
@@ -43,7 +43,9 @@ public class UserController {
     public GeneralResponse<UserResponse> getUserById(@PathVariable("id") Long id) throws UserNotFoundException,
             FileReadException {
         UserResponse response = userService.getUserById(id);
-        return new GeneralResponse<>(ResponseTitle.USERS, true, "User obtained successfully.", response);
+        return new GeneralResponse<>(
+                ResponseTitle.USERS, true, "User obtained successfully.", response
+        );
     }
 
 }
