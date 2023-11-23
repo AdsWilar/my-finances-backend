@@ -1,5 +1,8 @@
 package bo.jads.myfinancesbackend.app.controllers;
 
+import bo.jads.myfinancesbackend.app.access.interceptor.ResourceAction;
+import bo.jads.myfinancesbackend.app.domain.entities.enums.ActionCode;
+import bo.jads.myfinancesbackend.app.domain.entities.enums.EntityType;
 import bo.jads.myfinancesbackend.app.dto.requests.AccountRequest;
 import bo.jads.myfinancesbackend.app.dto.requests.UserAccountRequest;
 import bo.jads.myfinancesbackend.app.dto.responses.AccountResponse;
@@ -7,10 +10,12 @@ import bo.jads.myfinancesbackend.app.dto.responses.GeneralResponse;
 import bo.jads.myfinancesbackend.app.dto.responses.UserAccountResponse;
 import bo.jads.myfinancesbackend.app.dto.responses.enums.ResponseTitle;
 import bo.jads.myfinancesbackend.app.exceptions.accounts.AccountAlreadyRegisteredException;
-import bo.jads.myfinancesbackend.app.exceptions.accounts.AccountNotFoundException;
-import bo.jads.myfinancesbackend.app.exceptions.currencies.CurrencyNotFoundException;
-import bo.jads.myfinancesbackend.app.exceptions.useraccounts.UserAccountException;
-import bo.jads.myfinancesbackend.app.exceptions.users.UserNotFoundException;
+import bo.jads.myfinancesbackend.app.exceptions.entitynotfound.CurrencyNotFoundException;
+import bo.jads.myfinancesbackend.app.exceptions.entitynotfound.EntityNotFoundException;
+import bo.jads.myfinancesbackend.app.exceptions.entitynotfound.UserAccountNotFoundException;
+import bo.jads.myfinancesbackend.app.exceptions.forbidden.UnauthorizedUserAccountException;
+import bo.jads.myfinancesbackend.app.exceptions.useraccounts.AlreadyInactiveUserAccountException;
+import bo.jads.myfinancesbackend.app.exceptions.useraccounts.UserAccountAlreadyRegisteredException;
 import bo.jads.myfinancesbackend.app.services.AccountService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -23,6 +28,7 @@ public class AccountController {
 
     private final AccountService accountService;
 
+    @ResourceAction(action = ActionCode.ACCOUNT_CREATION, entity = EntityType.ACCOUNT)
     @PostMapping
     public GeneralResponse<AccountResponse> registerAccount(@Valid @RequestBody AccountRequest request)
             throws AccountAlreadyRegisteredException, CurrencyNotFoundException {
@@ -32,18 +38,20 @@ public class AccountController {
         );
     }
 
+    @ResourceAction(action = ActionCode.USER_TO_ACCOUNT_ASSOCIATION, entity = EntityType.USER_ACCOUNT)
     @PostMapping("/user-accounts")
     public GeneralResponse<UserAccountResponse> associateUserToAccount(@Valid @RequestBody UserAccountRequest request)
-            throws UserNotFoundException, AccountNotFoundException, UserAccountException {
+            throws EntityNotFoundException, UnauthorizedUserAccountException, UserAccountAlreadyRegisteredException {
         UserAccountResponse response = accountService.associateUserToAccount(request);
         return new GeneralResponse<>(
                 ResponseTitle.ACCOUNTS, true, "User associated to account successfully.", response
         );
     }
 
+    @ResourceAction(action = ActionCode.USER_ACCOUNT_DEACTIVATION, entity = EntityType.USER_ACCOUNT)
     @PutMapping("/user-accounts/{userAccountId}")
     public GeneralResponse<UserAccountResponse> deactivateUserAccount(@PathVariable("userAccountId") Long userAccountId)
-            throws UserAccountException {
+            throws UserAccountNotFoundException, AlreadyInactiveUserAccountException, UnauthorizedUserAccountException {
         UserAccountResponse response = accountService.deactivateUserAccount(userAccountId);
         return new GeneralResponse<>(
                 ResponseTitle.ACCOUNTS, true, "User Account successfully deactivated.", response
