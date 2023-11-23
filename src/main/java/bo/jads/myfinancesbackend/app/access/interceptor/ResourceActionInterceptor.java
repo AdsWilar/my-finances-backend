@@ -50,18 +50,21 @@ public class ResourceActionInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
             throws Exception {
         boolean isThereAnException = ex != null;
-        Long affectedEntityId = SessionHolder.getAffectedEntityId();
-        EntityType affectedEntityType = SessionHolder.getAffectedEntityType();
+        Long involvedEntityId = SessionHolder.getInvolvedEntityId();
+        boolean involvedEntityIdIsNull = involvedEntityId == null;
+        EntityType involvedEntityType =
+                involvedEntityIdIsNull ? EntityType.NONE : SessionHolder.getInvolvedEntityType();
         Long loggedInUserId = SessionHolder.getLoggedInUserId();
         Long actionId = SessionHolder.getActionId();
-        if (affectedEntityId != null && affectedEntityType != null && loggedInUserId != null &&
-                actionId != null) {
+        if (involvedEntityType != null && loggedInUserId != null && actionId != null) {
             ActivityLog activityLog = new ActivityLog();
             activityLog.setExecutionTimestamp(new Timestamp(new Date().getTime()));
             activityLog.setResult(isThereAnException ? ActivityLogResult.FAILED : ActivityLogResult.SUCCESSFUL);
             activityLog.setMessage(isThereAnException ? ex.getMessage() : "");
-            activityLog.setAffectedEntityId(affectedEntityId);
-            activityLog.setAffectedEntityType(affectedEntityType);
+            if (!involvedEntityIdIsNull) {
+                activityLog.setInvolvedEntityId(involvedEntityId);
+            }
+            activityLog.setInvolvedEntityType(involvedEntityType);
             activityLog.setUserId(loggedInUserId);
             activityLog.setActionId(actionId);
             saveActivityLog.execute(activityLog);
@@ -77,6 +80,6 @@ public class ResourceActionInterceptor implements HandlerInterceptor {
         }
         Action action = getActionByCode.execute(actionCode);
         SessionHolder.setActionId(action.getId());
-        SessionHolder.setAffectedEntityType(entityType);
+        SessionHolder.setInvolvedEntityType(entityType);
     }
 }

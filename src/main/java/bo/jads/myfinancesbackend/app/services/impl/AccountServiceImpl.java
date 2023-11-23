@@ -59,22 +59,26 @@ public class AccountServiceImpl implements AccountService {
         try {
             UserAccount userAccount = getUserAccountByUserIdAndAccountName
                     .execute(new GetUserAccountByUserIdAndAccountName.Param(loggedInUserId, name));
-            SessionHolder.setAffectedEntityId(userAccount.getAccountId());
-            String error;
-            if (userAccount.getIsActive()) {
-                error = String.format("An Account with the name: %s is already registered.", name);
-            } else {
-                error = String.format("An Account with the name: %s is already registered, but it is INACTIVE.", name);
+            SessionHolder.setInvolvedEntityId(userAccount.getAccountId());
+            if (userAccount.getIsOwner()) {
+                String error;
+                if (userAccount.getIsActive()) {
+                    error = String.format("An Account with the name: %s is already registered.", name);
+                } else {
+                    error = String.format(
+                            "An Account with the name: %s is already registered, but it is INACTIVE.", name
+                    );
+                }
+                throw new AccountAlreadyRegisteredException(error);
             }
-            throw new AccountAlreadyRegisteredException(error);
         } catch (UserAccountNotFoundException ignored) {
-            Currency currency = getCurrencyById.execute(request.getCurrencyId());
-            AccountResponse response = saveAccount.execute(request);
-            response.setCurrency(currencyMapper.entityToResponse(currency));
-            saveUserAccount(true, loggedInUserId, response.getId());
-            SessionHolder.setAffectedEntityId(response.getId());
-            return response;
         }
+        Currency currency = getCurrencyById.execute(request.getCurrencyId());
+        AccountResponse response = saveAccount.execute(request);
+        response.setCurrency(currencyMapper.entityToResponse(currency));
+        saveUserAccount(true, loggedInUserId, response.getId());
+        SessionHolder.setInvolvedEntityId(response.getId());
+        return response;
     }
 
     @Override
@@ -92,7 +96,7 @@ public class AccountServiceImpl implements AccountService {
             try {
                 UserAccount userAccount = getUserAccountByUserIdAndAccountId
                         .execute(new GetUserAccountByUserIdAndAccountId.Param(userId, accountId));
-                SessionHolder.setAffectedEntityId(userAccount.getId());
+                SessionHolder.setInvolvedEntityId(userAccount.getId());
                 if (userAccount.getIsActive()) {
                     throw new UserAccountAlreadyRegisteredException();
                 }
@@ -102,7 +106,7 @@ public class AccountServiceImpl implements AccountService {
                 UserAccountResponse response = saveUserAccount(false, userId, accountId);
                 response.setUser(userMapper.entityToResponse(user));
                 response.setAccount(accountMapper.entityToResponse(account));
-                SessionHolder.setAffectedEntityId(response.getId());
+                SessionHolder.setInvolvedEntityId(response.getId());
                 return response;
             }
         } catch (UserAccountNotFoundException e) {
@@ -114,7 +118,7 @@ public class AccountServiceImpl implements AccountService {
     public UserAccountResponse deactivateUserAccount(Long userAccountId) throws UserAccountNotFoundException,
             AlreadyInactiveUserAccountException, UnauthorizedUserAccountException {
         UserAccount userAccount = getUserAccountById.execute(userAccountId);
-        SessionHolder.setAffectedEntityId(userAccount.getId());
+        SessionHolder.setInvolvedEntityId(userAccount.getId());
         if (!userAccount.getIsActive()) {
             throw new AlreadyInactiveUserAccountException();
         }

@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
                 UserResponse response = saveUser.execute(request);
                 Long userId = response.getId();
                 SessionHolder.setLoggedInUserId(userId);
-                SessionHolder.setAffectedEntityId(userId);
+                SessionHolder.setInvolvedEntityId(userId);
                 return response;
             }
         }
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
             User user = getUserByUsername.execute(request.getUsername());
             Long userId = user.getId();
             SessionHolder.setLoggedInUserId(userId);
-            SessionHolder.setAffectedEntityId(userId);
+            SessionHolder.setInvolvedEntityId(userId);
             if (!PasswordEncryptor.checkPassword(request.getPassword(), user.getPassword())) {
                 throw new InvalidCredentialsException();
             }

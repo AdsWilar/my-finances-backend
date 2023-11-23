@@ -4,6 +4,6 @@ public enum UserStatus {
 
     ENABLED,
     DISABLED,
-    PASSWORD_RESTORED
+    PASSWORD_RESET
 
 }

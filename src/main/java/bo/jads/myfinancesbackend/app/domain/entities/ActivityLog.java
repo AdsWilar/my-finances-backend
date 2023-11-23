@@ -28,12 +28,12 @@ public class ActivityLog {
     @Column(name = "message", nullable = false, length = 512)
     private String message;
 
-    @Column(name = "affected_entity_id", nullable = false)
-    private Long affectedEntityId;
+    @Column(name = "involved_entity_id")
+    private Long involvedEntityId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "affected_entity_type", nullable = false, length = 32)
-    private EntityType affectedEntityType;
+    @Column(name = "involved_entity_type", nullable = false, length = 32)
+    private EntityType involvedEntityType;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
