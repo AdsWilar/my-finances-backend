@@ -65,7 +65,7 @@ CREATE TABLE `actions`
 (
     `id`   BIGINT      NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(64) NOT NULL,
-    `code` VARCHAR(64) NOT NULL,
+    `code` VARCHAR(64) NOT NULL UNIQUE,
     PRIMARY KEY (`id`)
 );
 
@@ -188,154 +188,322 @@ CREATE TABLE `user_account_actions`
 
 SET FOREIGN_KEY_CHECKS = 1;
 
-INSERT INTO currencies(name, acronym, symbol) VALUES ('UAE Dirham', 'AED', 'د.إ');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Afghani', 'AFN', 'Af');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Lek', 'ALL', 'L');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Armenian Dram', 'AMD', 'Դ');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Kwanza', 'AOA', 'Kz');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Argentine Peso', 'ARS', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Australian Dollar', 'AUD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Aruban Guilder/Florin', 'AWG', 'ƒ');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Azerbaijanian Manat', 'AZN', 'ман');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Konvertibilna Marka', 'BAM', 'КМ');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Barbados Dollar', 'BBD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Taka', 'BDT', '৳');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Bulgarian Lev', 'BGN', 'лв');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Bahraini Dinar', 'BHD', 'ب.د');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Burundi Franc', 'BIF', '₣');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Bermudian Dollar', 'BMD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Brunei Dollar', 'BND', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Boliviano', 'BOB', 'Bs.');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Brazilian Real', 'BRL', 'R$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Bahamian Dollar', 'BSD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Ngultrum', 'BTN', 'Nu.');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Pula', 'BWP', 'P');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Belarusian Ruble', 'BYN', 'Br');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Belize Dollar', 'BZD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Canadian Dollar', 'CAD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Congolese Franc', 'CDF', '₣');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Swiss Franc', 'CHF', '₣');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Chilean Peso', 'CLP', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Yuan', 'CNY', '¥');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Colombian Peso', 'COP', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Costa Rican Colon', 'CRC', '₡');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Cuban Peso', 'CUP', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Cape Verde Escudo', 'CVE', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Czech Koruna', 'CZK', 'Kč');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Djibouti Franc', 'DJF', '₣');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Danish Krone', 'DKK', 'kr');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Dominican Peso', 'DOP', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Algerian Dinar', 'DZD', 'د.ج');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Egyptian Pound', 'EGP', '£');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Nakfa', 'ERN', 'Nfk');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Ethiopian Birr', 'ETB', 'Br');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Euro', 'EUR', '€');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Fiji Dollar', 'FJD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Falkland Islands Pound', 'FKP', '£');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Pound Sterling', 'GBP', '£');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Lari', 'GEL', 'ლ');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Cedi', 'GHS', '₵');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Gibraltar Pound', 'GIP', '£');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Dalasi', 'GMD', 'D');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Guinea Franc', 'GNF', '₣');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Quetzal', 'GTQ', 'Q');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Guyana Dollar', 'GYD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Hong Kong Dollar', 'HKD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Lempira', 'HNL', 'L');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Croatian Kuna', 'HRK', 'Kn');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Gourde', 'HTG', 'G');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Forint', 'HUF', 'Ft');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Rupiah', 'IDR', 'Rp');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('New Israeli Shekel', 'ILS', '₪');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Indian Rupee', 'INR', '₹');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Iraqi Dinar', 'IQD', 'ع.د');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Iranian Rial', 'IRR', '﷼');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Iceland Krona', 'ISK', 'Kr');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Jamaican Dollar', 'JMD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Jordanian Dinar', 'JOD', 'د.ا');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Yen', 'JPY', '¥');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Kenyan Shilling', 'KES', 'Sh');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Som', 'KGS', 'C/.');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Riel', 'KHR', '៛');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('North Korean Won', 'KPW', '₩');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('South Korean Won', 'KRW', '₩');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Kuwaiti Dinar', 'KWD', 'د.ك');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Cayman Islands Dollar', 'KYD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Tenge', 'KZT', '〒');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Kip', 'LAK', '₭');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Lebanese Pound', 'LBP', 'ل.ل');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Sri Lanka Rupee', 'LKR', 'Rs');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Liberian Dollar', 'LRD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Loti', 'LSL', 'L');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Libyan Dinar', 'LYD', 'ل.د');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Moroccan Dirham', 'MAD', 'د.م.');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Moldovan Leu', 'MDL', 'L');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Malagasy Ariary', 'MGA', 'Ar');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Denar', 'MKD', 'ден');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Kyat', 'MMK', 'K');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Tugrik', 'MNT', '₮');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Pataca', 'MOP', 'P');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Ouguiya', 'MRU', 'UM');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Mauritius Rupee', 'MUR', '₨');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Rufiyaa', 'MVR', 'ރ.');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Kwacha', 'MWK', 'MK');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Mexican Peso', 'MXN', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Malaysian Ringgit', 'MYR', 'RM');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Metical', 'MZN', 'MTn');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Namibia Dollar', 'NAD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Naira', 'NGN', '₦');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Cordoba Oro', 'NIO', 'C$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Norwegian Krone', 'NOK', 'kr');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Nepalese Rupee', 'NPR', '₨');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('New Zealand Dollar', 'NZD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Rial Omani', 'OMR', 'ر.ع.');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Balboa', 'PAB', 'B/.');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Nuevo Sol', 'PEN', 'S/.');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Kina', 'PGK', 'K');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Philippine Peso', 'PHP', '₱');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Pakistan Rupee', 'PKR', '₨');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('PZloty', 'PLN', 'zł');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Guarani', 'PYG', '₲');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Qatari Rial', 'QAR', 'ر.ق');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Leu', 'RON', 'L');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Serbian Dinar', 'RSD', 'din');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Russian Ruble', 'RUB', 'р.');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Rwanda Franc', 'RWF', '₣');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Saudi Riyal', 'SAR', 'ر.س');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Solomon Islands Dollar', 'SBD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Seychelles Rupee', 'SCR', '₨');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Sudanese Pound', 'SDG', '£');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Swedish Krona', 'SEK', 'kr');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Singapore Dollar', 'SGD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Saint Helena Pound', 'SHP', '£');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Leone', 'SLL', 'Le');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Somali Shilling', 'SOS', 'Sh');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Suriname Dollar', 'SRD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Dobra', 'STN', 'Db');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Syrian Pound', 'SYP', 'ل.س');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Lilangeni', 'SZL', 'L');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Baht', 'THB', '฿');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Somoni', 'TJS', 'ЅМ');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Manat', 'TMT', 'm');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Tunisian Dinar', 'TND', 'د.ت');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Pa’anga', 'TOP', 'T$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Turkish Lira', 'TRY', '₤');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Trinidad and Tobago Dollar', 'TTD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Taiwan Dollar', 'TWD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Tanzanian Shilling', 'TZS', 'Sh');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Hryvnia', 'UAH', '₴');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Uganda Shilling', 'UGX', 'Sh');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('US Dollar', 'USD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Peso Uruguayo', 'UYU', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Uzbekistan Sum', 'UZS', 'C/.');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Bolivar Fuerte', 'VEF', 'Bs. F');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Dong', 'VND', '₫');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Vatu', 'VUV', 'Vt');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Tala', 'WST', 'T');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('CFA Franc BCEAO', 'XAF', '₣');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('East Caribbean Dollar', 'XCD', '$');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('CFP Franc', 'XPF', '₣');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Yemeni Rial', 'YER', '﷼');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Rand', 'ZAR', 'R');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Zambian Kwacha', 'ZMW', 'ZK');
-INSERT INTO currencies(name, acronym, symbol) VALUES ('Zimbabwe Dollar', 'ZWL', '$');
+
+-- Insertion of actions
+INSERT INTO actions(name, code)
+VALUES ('User registration', 'USER_REGISTRATION');
+INSERT INTO actions(name, code)
+VALUES ('Login', 'LOGIN');
+INSERT INTO actions(name, code)
+VALUES ('Password reset', 'PASSWORD_RESET');
+
+INSERT INTO actions(name, code)
+VALUES ('Account creation', 'ACCOUNT_CREATION');
+INSERT INTO actions(name, code)
+VALUES ('User to account association', 'USER_TO_ACCOUNT_ASSOCIATION');
+INSERT INTO actions(name, code)
+VALUES ('User account deactivation', 'USER_ACCOUNT_DEACTIVATION');
+
+-- Insertion of currencies
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('UAE Dirham', 'AED', 'د.إ');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Afghani', 'AFN', 'Af');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Lek', 'ALL', 'L');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Armenian Dram', 'AMD', 'Դ');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Kwanza', 'AOA', 'Kz');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Argentine Peso', 'ARS', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Australian Dollar', 'AUD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Aruban Guilder/Florin', 'AWG', 'ƒ');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Azerbaijanian Manat', 'AZN', 'ман');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Konvertibilna Marka', 'BAM', 'КМ');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Barbados Dollar', 'BBD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Taka', 'BDT', '৳');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Bulgarian Lev', 'BGN', 'лв');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Bahraini Dinar', 'BHD', 'ب.د');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Burundi Franc', 'BIF', '₣');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Bermudian Dollar', 'BMD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Brunei Dollar', 'BND', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Boliviano', 'BOB', 'Bs.');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Brazilian Real', 'BRL', 'R$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Bahamian Dollar', 'BSD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Ngultrum', 'BTN', 'Nu.');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Pula', 'BWP', 'P');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Belarusian Ruble', 'BYN', 'Br');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Belize Dollar', 'BZD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Canadian Dollar', 'CAD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Congolese Franc', 'CDF', '₣');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Swiss Franc', 'CHF', '₣');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Chilean Peso', 'CLP', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Yuan', 'CNY', '¥');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Colombian Peso', 'COP', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Costa Rican Colon', 'CRC', '₡');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Cuban Peso', 'CUP', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Cape Verde Escudo', 'CVE', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Czech Koruna', 'CZK', 'Kč');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Djibouti Franc', 'DJF', '₣');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Danish Krone', 'DKK', 'kr');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Dominican Peso', 'DOP', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Algerian Dinar', 'DZD', 'د.ج');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Egyptian Pound', 'EGP', '£');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Nakfa', 'ERN', 'Nfk');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Ethiopian Birr', 'ETB', 'Br');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Euro', 'EUR', '€');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Fiji Dollar', 'FJD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Falkland Islands Pound', 'FKP', '£');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Pound Sterling', 'GBP', '£');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Lari', 'GEL', 'ლ');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Cedi', 'GHS', '₵');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Gibraltar Pound', 'GIP', '£');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Dalasi', 'GMD', 'D');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Guinea Franc', 'GNF', '₣');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Quetzal', 'GTQ', 'Q');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Guyana Dollar', 'GYD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Hong Kong Dollar', 'HKD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Lempira', 'HNL', 'L');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Croatian Kuna', 'HRK', 'Kn');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Gourde', 'HTG', 'G');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Forint', 'HUF', 'Ft');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Rupiah', 'IDR', 'Rp');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('New Israeli Shekel', 'ILS', '₪');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Indian Rupee', 'INR', '₹');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Iraqi Dinar', 'IQD', 'ع.د');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Iranian Rial', 'IRR', '﷼');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Iceland Krona', 'ISK', 'Kr');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Jamaican Dollar', 'JMD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Jordanian Dinar', 'JOD', 'د.ا');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Yen', 'JPY', '¥');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Kenyan Shilling', 'KES', 'Sh');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Som', 'KGS', 'C/.');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Riel', 'KHR', '៛');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('North Korean Won', 'KPW', '₩');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('South Korean Won', 'KRW', '₩');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Kuwaiti Dinar', 'KWD', 'د.ك');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Cayman Islands Dollar', 'KYD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Tenge', 'KZT', '〒');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Kip', 'LAK', '₭');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Lebanese Pound', 'LBP', 'ل.ل');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Sri Lanka Rupee', 'LKR', 'Rs');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Liberian Dollar', 'LRD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Loti', 'LSL', 'L');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Libyan Dinar', 'LYD', 'ل.د');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Moroccan Dirham', 'MAD', 'د.م.');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Moldovan Leu', 'MDL', 'L');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Malagasy Ariary', 'MGA', 'Ar');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Denar', 'MKD', 'ден');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Kyat', 'MMK', 'K');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Tugrik', 'MNT', '₮');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Pataca', 'MOP', 'P');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Ouguiya', 'MRU', 'UM');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Mauritius Rupee', 'MUR', '₨');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Rufiyaa', 'MVR', 'ރ.');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Kwacha', 'MWK', 'MK');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Mexican Peso', 'MXN', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Malaysian Ringgit', 'MYR', 'RM');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Metical', 'MZN', 'MTn');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Namibia Dollar', 'NAD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Naira', 'NGN', '₦');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Cordoba Oro', 'NIO', 'C$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Norwegian Krone', 'NOK', 'kr');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Nepalese Rupee', 'NPR', '₨');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('New Zealand Dollar', 'NZD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Rial Omani', 'OMR', 'ر.ع.');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Balboa', 'PAB', 'B/.');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Nuevo Sol', 'PEN', 'S/.');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Kina', 'PGK', 'K');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Philippine Peso', 'PHP', '₱');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Pakistan Rupee', 'PKR', '₨');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('PZloty', 'PLN', 'zł');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Guarani', 'PYG', '₲');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Qatari Rial', 'QAR', 'ر.ق');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Leu', 'RON', 'L');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Serbian Dinar', 'RSD', 'din');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Russian Ruble', 'RUB', 'р.');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Rwanda Franc', 'RWF', '₣');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Saudi Riyal', 'SAR', 'ر.س');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Solomon Islands Dollar', 'SBD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Seychelles Rupee', 'SCR', '₨');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Sudanese Pound', 'SDG', '£');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Swedish Krona', 'SEK', 'kr');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Singapore Dollar', 'SGD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Saint Helena Pound', 'SHP', '£');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Leone', 'SLL', 'Le');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Somali Shilling', 'SOS', 'Sh');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Suriname Dollar', 'SRD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Dobra', 'STN', 'Db');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Syrian Pound', 'SYP', 'ل.س');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Lilangeni', 'SZL', 'L');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Baht', 'THB', '฿');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Somoni', 'TJS', 'ЅМ');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Manat', 'TMT', 'm');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Tunisian Dinar', 'TND', 'د.ت');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Pa’anga', 'TOP', 'T$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Turkish Lira', 'TRY', '₤');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Trinidad and Tobago Dollar', 'TTD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Taiwan Dollar', 'TWD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Tanzanian Shilling', 'TZS', 'Sh');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Hryvnia', 'UAH', '₴');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Uganda Shilling', 'UGX', 'Sh');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('US Dollar', 'USD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Peso Uruguayo', 'UYU', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Uzbekistan Sum', 'UZS', 'C/.');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Bolivar Fuerte', 'VEF', 'Bs. F');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Dong', 'VND', '₫');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Vatu', 'VUV', 'Vt');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Tala', 'WST', 'T');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('CFA Franc BCEAO', 'XAF', '₣');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('East Caribbean Dollar', 'XCD', '$');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('CFP Franc', 'XPF', '₣');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Yemeni Rial', 'YER', '﷼');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Rand', 'ZAR', 'R');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Zambian Kwacha', 'ZMW', 'ZK');
+INSERT INTO currencies(name, acronym, symbol)
+VALUES ('Zimbabwe Dollar', 'ZWL', '$');

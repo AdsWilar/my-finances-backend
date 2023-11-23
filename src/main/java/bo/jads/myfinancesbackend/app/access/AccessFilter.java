@@ -1,17 +1,22 @@
 package bo.jads.myfinancesbackend.app.access;
 
+import bo.jads.myfinancesbackend.app.domain.entities.User;
 import bo.jads.myfinancesbackend.app.dto.responses.UserResponse;
-import bo.jads.myfinancesbackend.app.exceptions.users.UserNotFoundException;
+import bo.jads.myfinancesbackend.app.exceptions.ErrorResponse;
+import bo.jads.myfinancesbackend.app.exceptions.entitynotfound.UserNotFoundException;
 import bo.jads.myfinancesbackend.app.usecases.users.GetUserById;
 import bo.jads.tokenmanager.core.TokenManager;
 import bo.jads.tokenmanager.exceptions.TokenDataException;
 import bo.jads.tokenmanager.exceptions.TokenValidationException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,9 +29,12 @@ public class AccessFilter extends OncePerRequestFilter {
 
     private final GetUserById getUserById;
 
-    private static final List<String> UNPROTECTED_ENDPOINTS = List.of("/api/users", "/api/users/log-in");
+    private static final List<String> UNPROTECTED_ENDPOINTS = List.of(
+            "/api/users",
+            "/api/users/log-in",
+            "/api/users/reset-password"
+    );
     private static final String INVALID_TOKEN = "Invalid token.";
-    private static final String UNAUTHORIZED_USER = "Unauthorized user.";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -40,25 +48,25 @@ public class AccessFilter extends OncePerRequestFilter {
             TokenManager tokenManager = TokenManager.getInstance();
             try {
                 if (tokenManager.tokenExpired(token)) {
-                    writeUnauthorizedResponseMessage(response, "Token expired.");
+                    writeUnauthorizedResponse("Token expired.", request, response);
                     return;
                 }
                 if (!tokenManager.tokenIntegrityIsValid(token)) {
-                    writeUnauthorizedResponseMessage(response, INVALID_TOKEN);
+                    writeUnauthorizedResponse(INVALID_TOKEN, request, response);
                     return;
                 }
                 UserResponse userResponse = tokenManager.getDataFromToken(token, UserResponse.class);
                 if (userResponse == null) {
-                    writeUnauthorizedResponseMessage(response, UNAUTHORIZED_USER);
+                    writeUnauthorizedResponse(INVALID_TOKEN, request, response);
                     return;
                 }
-                getUserById.execute(userResponse.getId());
-                SessionHolder.getInstance().setLoggedInUser(userResponse);
+                User loggedInUser = getUserById.execute(userResponse.getId());
+                SessionHolder.setLoggedInUserId(loggedInUser.getId());
             } catch (TokenValidationException | TokenDataException e) {
-                writeUnauthorizedResponseMessage(response, INVALID_TOKEN);
+                writeUnauthorizedResponse(INVALID_TOKEN, request, response);
                 return;
             } catch (UserNotFoundException e) {
-                writeUnauthorizedResponseMessage(response, UNAUTHORIZED_USER);
+                writeUnauthorizedResponse("Unauthorized user.", request, response);
                 return;
             }
         }
@@ -66,22 +74,28 @@ public class AccessFilter extends OncePerRequestFilter {
     }
 
     private String getTokenFromHeader(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String authorization = request.getHeader("authorization");
+        String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authorization == null || authorization.isBlank()) {
-            writeUnauthorizedResponseMessage(response, "Token is required.");
+            writeUnauthorizedResponse("Token is required.", request, response);
             return null;
         }
         String bearerPrefix = "Bearer ";
         if (!authorization.startsWith(bearerPrefix)) {
-            writeUnauthorizedResponseMessage(response, INVALID_TOKEN);
+            writeUnauthorizedResponse(INVALID_TOKEN, request, response);
             return null;
         }
         return authorization.replaceFirst(bearerPrefix, "");
     }
 
-    private void writeUnauthorizedResponseMessage(HttpServletResponse response, String message) throws IOException {
-        response.getWriter().write(message);
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+    private void writeUnauthorizedResponse(String message, HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatusCode.valueOf(HttpStatus.UNAUTHORIZED.value()), message, request.getRequestURI()
+        );
+        String responseBody = new ObjectMapper().writeValueAsString(errorResponse);
+        response.getWriter().write(responseBody);
+        response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 
 }

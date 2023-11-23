@@ -1,33 +1,51 @@
 package bo.jads.myfinancesbackend.app.access;
 
-import bo.jads.myfinancesbackend.app.dto.responses.UserResponse;
+import bo.jads.myfinancesbackend.app.domain.entities.enums.EntityType;
 
 public class SessionHolder {
 
-    private static SessionHolder sessionHolder;
-    private final ThreadLocal<UserResponse> loggedInUser;
+    private static final ThreadLocal<Long> LOGGED_IN_USER_ID = new InheritableThreadLocal<>();
+    private static final ThreadLocal<Long> ACTION_ID = new InheritableThreadLocal<>();
+    private static final ThreadLocal<Long> AFFECTED_ENTITY_ID = new InheritableThreadLocal<>();
+    private static final ThreadLocal<EntityType> AFFECTED_ENTITY_TYPE = new InheritableThreadLocal<>();
 
-    private SessionHolder() {
-        loggedInUser = new InheritableThreadLocal<>();
+    public static Long getLoggedInUserId() {
+        return LOGGED_IN_USER_ID.get();
     }
 
-    public static SessionHolder getInstance() {
-        if (sessionHolder == null) {
-            sessionHolder = new SessionHolder();
-        }
-        return sessionHolder;
+    public static Long getActionId() {
+        return ACTION_ID.get();
     }
 
-    public UserResponse getLoggedInUser() {
-        return loggedInUser.get();
+    public static Long getAffectedEntityId() {
+        return AFFECTED_ENTITY_ID.get();
     }
 
-    public void setLoggedInUser(UserResponse userResponse) {
-        loggedInUser.set(userResponse);
+    public static EntityType getAffectedEntityType() {
+        return AFFECTED_ENTITY_TYPE.get();
     }
 
-    public void clear() {
-        loggedInUser.remove();
+    public static void setLoggedInUserId(Long loggedInUserId) {
+        LOGGED_IN_USER_ID.set(loggedInUserId);
+    }
+
+    public static void setActionId(Long actionId) {
+        ACTION_ID.set(actionId);
+    }
+
+    public static void setAffectedEntityId(Long affectedEntityId) {
+        AFFECTED_ENTITY_ID.set(affectedEntityId);
+    }
+
+    public static void setAffectedEntityType(EntityType affectedEntityType) {
+        AFFECTED_ENTITY_TYPE.set(affectedEntityType);
+    }
+
+    public static void clear() {
+        LOGGED_IN_USER_ID.remove();
+        ACTION_ID.remove();
+        AFFECTED_ENTITY_ID.remove();
+        AFFECTED_ENTITY_TYPE.remove();
     }
 
 }

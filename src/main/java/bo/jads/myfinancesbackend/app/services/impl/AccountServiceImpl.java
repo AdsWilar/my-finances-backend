@@ -10,10 +10,12 @@ import bo.jads.myfinancesbackend.app.dto.requests.UserAccountRequest;
 import bo.jads.myfinancesbackend.app.dto.responses.AccountResponse;
 import bo.jads.myfinancesbackend.app.dto.responses.UserAccountResponse;
 import bo.jads.myfinancesbackend.app.exceptions.accounts.AccountAlreadyRegisteredException;
-import bo.jads.myfinancesbackend.app.exceptions.accounts.AccountNotFoundException;
-import bo.jads.myfinancesbackend.app.exceptions.currencies.CurrencyNotFoundException;
-import bo.jads.myfinancesbackend.app.exceptions.useraccounts.*;
-import bo.jads.myfinancesbackend.app.exceptions.users.UserNotFoundException;
+import bo.jads.myfinancesbackend.app.exceptions.entitynotfound.CurrencyNotFoundException;
+import bo.jads.myfinancesbackend.app.exceptions.entitynotfound.EntityNotFoundException;
+import bo.jads.myfinancesbackend.app.exceptions.entitynotfound.UserAccountNotFoundException;
+import bo.jads.myfinancesbackend.app.exceptions.forbidden.UnauthorizedUserAccountException;
+import bo.jads.myfinancesbackend.app.exceptions.useraccounts.AlreadyInactiveUserAccountException;
+import bo.jads.myfinancesbackend.app.exceptions.useraccounts.UserAccountAlreadyRegisteredException;
 import bo.jads.myfinancesbackend.app.mappers.AccountMapper;
 import bo.jads.myfinancesbackend.app.mappers.CurrencyMapper;
 import bo.jads.myfinancesbackend.app.mappers.UserMapper;
@@ -52,11 +54,12 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountResponse registerAccount(AccountRequest request) throws AccountAlreadyRegisteredException,
             CurrencyNotFoundException {
-        Long loggedInUserId = SessionHolder.getInstance().getLoggedInUser().getId();
+        Long loggedInUserId = SessionHolder.getLoggedInUserId();
         String name = request.getName();
         try {
             UserAccount userAccount = getUserAccountByUserIdAndAccountName
                     .execute(new GetUserAccountByUserIdAndAccountName.Param(loggedInUserId, name));
+            SessionHolder.setAffectedEntityId(userAccount.getAccountId());
             String error;
             if (userAccount.getIsActive()) {
                 error = String.format("An Account with the name: %s is already registered.", name);
@@ -69,25 +72,27 @@ public class AccountServiceImpl implements AccountService {
             AccountResponse response = saveAccount.execute(request);
             response.setCurrency(currencyMapper.entityToResponse(currency));
             saveUserAccount(true, loggedInUserId, response.getId());
+            SessionHolder.setAffectedEntityId(response.getId());
             return response;
         }
     }
 
     @Override
-    public UserAccountResponse associateUserToAccount(UserAccountRequest request) throws UserNotFoundException,
-            AccountNotFoundException, UserAccountException {
+    public UserAccountResponse associateUserToAccount(UserAccountRequest request) throws EntityNotFoundException,
+            UnauthorizedUserAccountException, UserAccountAlreadyRegisteredException {
         User user = getUserById.execute(request.getUserId());
         Account account = getAccountById.execute(request.getAccountId());
         try {
             getActiveAndOwnerUserAccountByUserIdAndAccountId
                     .execute(new GetActiveAndOwnerUserAccountByUserIdAndAccountId.Param(
-                            SessionHolder.getInstance().getLoggedInUser().getId(), account.getId()
+                            SessionHolder.getLoggedInUserId(), account.getId()
                     ));
             Long userId = user.getId();
             Long accountId = account.getId();
             try {
                 UserAccount userAccount = getUserAccountByUserIdAndAccountId
                         .execute(new GetUserAccountByUserIdAndAccountId.Param(userId, accountId));
+                SessionHolder.setAffectedEntityId(userAccount.getId());
                 if (userAccount.getIsActive()) {
                     throw new UserAccountAlreadyRegisteredException();
                 }
@@ -97,6 +102,7 @@ public class AccountServiceImpl implements AccountService {
                 UserAccountResponse response = saveUserAccount(false, userId, accountId);
                 response.setUser(userMapper.entityToResponse(user));
                 response.setAccount(accountMapper.entityToResponse(account));
+                SessionHolder.setAffectedEntityId(response.getId());
                 return response;
             }
         } catch (UserAccountNotFoundException e) {
@@ -105,12 +111,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public UserAccountResponse deactivateUserAccount(Long userAccountId) throws UserAccountException {
+    public UserAccountResponse deactivateUserAccount(Long userAccountId) throws UserAccountNotFoundException,
+            AlreadyInactiveUserAccountException, UnauthorizedUserAccountException {
         UserAccount userAccount = getUserAccountById.execute(userAccountId);
+        SessionHolder.setAffectedEntityId(userAccount.getId());
         if (!userAccount.getIsActive()) {
             throw new AlreadyInactiveUserAccountException();
         }
-        Long loggedInUserId = SessionHolder.getInstance().getLoggedInUser().getId();
+        Long loggedInUserId = SessionHolder.getLoggedInUserId();
         if (userAccount.getIsOwner()) {
             if (!userAccount.getUserId().equals(loggedInUserId)) {
                 throw new UnauthorizedUserAccountException();

@@ -2,7 +2,7 @@ package bo.jads.myfinancesbackend.app.usecases.currencies;
 
 import bo.jads.myfinancesbackend.app.domain.entities.Currency;
 import bo.jads.myfinancesbackend.app.domain.repositories.CurrencyRepository;
-import bo.jads.myfinancesbackend.app.exceptions.currencies.CurrencyNotFoundException;
+import bo.jads.myfinancesbackend.app.exceptions.entitynotfound.CurrencyNotFoundException;
 import bo.jads.myfinancesbackend.app.usecases.BaseUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

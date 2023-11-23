@@ -1,6 +1,6 @@
-package bo.jads.myfinancesbackend.app.exceptions.useraccounts;
+package bo.jads.myfinancesbackend.app.exceptions.forbidden;
 
-public class UnauthorizedUserAccountException extends UserAccountException {
+public class UnauthorizedUserAccountException extends ForbiddenException {
 
     public UnauthorizedUserAccountException() {
         super("The User does not have authorization over the Account.");
