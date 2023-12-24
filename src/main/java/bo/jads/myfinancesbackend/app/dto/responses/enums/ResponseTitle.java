@@ -4,6 +4,7 @@ public enum ResponseTitle {
 
     USERS,
     ACCOUNTS,
-    CURRENCIES
+    CURRENCIES,
+    ACCOUNT_ACTIONS
 
 }

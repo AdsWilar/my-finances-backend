@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public class FindAllUseCase<
+public class GetAllUseCase<
         Entity,
         Repository extends JpaRepository<Entity, ?>,
         Response,
@@ -15,7 +15,7 @@ public class FindAllUseCase<
     private final Repository repository;
     private final Mapper mapper;
 
-    public FindAllUseCase(Repository repository, Mapper mapper) {
+    public GetAllUseCase(Repository repository, Mapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }

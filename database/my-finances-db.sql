@@ -193,6 +193,8 @@ SET FOREIGN_KEY_CHECKS = 1;
 INSERT INTO actions(name, code)
 VALUES ('User registration', 'USER_REGISTRATION');
 INSERT INTO actions(name, code)
+VALUES ('User update', 'USER_UPDATE');
+INSERT INTO actions(name, code)
 VALUES ('Login', 'LOGIN');
 INSERT INTO actions(name, code)
 VALUES ('Password reset', 'PASSWORD_RESET');
@@ -200,9 +202,34 @@ VALUES ('Password reset', 'PASSWORD_RESET');
 INSERT INTO actions(name, code)
 VALUES ('Account creation', 'ACCOUNT_CREATION');
 INSERT INTO actions(name, code)
+VALUES ('Account update', 'ACCOUNT_UPDATE');
+INSERT INTO actions(name, code)
+VALUES ('Account deletion', 'ACCOUNT_DELETION');
+INSERT INTO actions(name, code)
 VALUES ('User to account association', 'USER_TO_ACCOUNT_ASSOCIATION');
 INSERT INTO actions(name, code)
 VALUES ('User account deactivation', 'USER_ACCOUNT_DEACTIVATION');
+
+INSERT INTO actions(name, code)
+VALUES ('Movement registration', 'MOVEMENT_REGISTRATION');
+INSERT INTO actions(name, code)
+VALUES ('Movement update', 'MOVEMENT_UPDATE');
+INSERT INTO actions(name, code)
+VALUES ('Movement deletion', 'MOVEMENT_DELETION');
+
+-- Insertion of account actions
+INSERT INTO account_actions(action_id)
+VALUES (6);
+INSERT INTO account_actions(action_id)
+VALUES (8);
+INSERT INTO account_actions(action_id)
+VALUES (9);
+INSERT INTO account_actions(action_id)
+VALUES (10);
+INSERT INTO account_actions(action_id)
+VALUES (11);
+INSERT INTO account_actions(action_id)
+VALUES (12);
 
 -- Insertion of currencies
 INSERT INTO currencies(name, acronym, symbol)
